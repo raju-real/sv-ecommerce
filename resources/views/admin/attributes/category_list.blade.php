@@ -53,9 +53,9 @@
                                         <span>{{ $category->status === 'active' ? 'Active' : 'In Active' }}</span>
                                     </td>
                                     <td>
-                                        <a href="{{ route('admin.categories.edit',$category->slug) }}"
-                                           class="btn btn-sm btn-success" title="Edit"><i class="fa fa-edit"></i></a>
-                                        <a class="btn btn-sm btn-danger delete-data"
+                                        <a data-bs-toggle="tooltip" data-bs-placement="top" title="Edit" href="{{ route('admin.categories.edit',$category->slug) }}"
+                                           class="btn btn-sm btn-soft-success" ><i class="fa fa-edit"></i></a>
+                                        <a data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" class="btn btn-sm btn-soft-danger delete-data"
                                            data-id="{{ 'delete-category-'.$category->id }}"
                                            href="javascript:void(0);">
                                             <i class="fa fa-trash"></i>

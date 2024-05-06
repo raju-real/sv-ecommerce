@@ -7,25 +7,31 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
 {
     public function index()
     {
         $categories = Category::latest()->paginate(20);
-        return view('admin.attributes.category_list',compact('categories'));
+        return view('admin.attributes.category_list', compact('categories'));
     }
 
     public function create()
     {
         $route = route('admin.categories.store');
-        return view('admin.attributes.category_add_edit',compact('route'));
+        return view('admin.attributes.category_add_edit', compact('route'));
     }
 
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'name' => 'required|string|max:50|unique:categories',
+        $this->validate($request, [
+            'name' => [
+                'required',
+                'string',
+                'max:50',
+                Rule::unique('sizes', 'name')->whereNull('deleted_at')
+            ],
             'icon' => 'nullable|sometimes|mimes:jpg,jpeg,png|max:1024',
             'status' => 'required|max:10|in:active,in-active'
         ]);
@@ -33,8 +39,8 @@ class CategoryController extends Controller
         $category = new Category();
         $category->name = $request->name;
         $category->slug = Str::slug($request->name);
-        if($request->file('icon')) {
-            $category->icon = uploadImage($request->file('icon'),'category');
+        if ($request->file('icon')) {
+            $category->icon = uploadImage($request->file('icon'), 'category');
         }
         $category->status = $request->status;
         $category->created_by = Auth::id();
@@ -46,15 +52,20 @@ class CategoryController extends Controller
     public function edit($slug)
     {
         $category = Category::whereSlug($slug)->first();
-        $route = route('admin.categories.update',$category->id);
-        return view('admin.attributes.category_add_edit',compact('category','route'));
+        $route = route('admin.categories.update', $category->id);
+        return view('admin.attributes.category_add_edit', compact('category', 'route'));
     }
 
 
     public function update(Request $request, $id)
     {
-        $this->validate($request,[
-            'name' => 'required|string|max:50|unique:categories,name,'.$id,
+        $this->validate($request, [
+            'name' => [
+                'required',
+                'string',
+                'max:50',
+                Rule::unique('sizes', 'name')->whereNull('deleted_at')->ignore($id),
+            ],
             'icon' => 'nullable|sometimes|mimes:jpg,jpeg,png|max:1024',
             'status' => 'required|max:10|in:active,in-active'
         ]);
@@ -62,8 +73,8 @@ class CategoryController extends Controller
         $category = Category::findOrFail($id);
         $category->name = $request->name;
         $category->slug = Str::slug($request->name);
-        if($request->file('icon')) {
-            $category->icon = uploadImage($request->file('icon'),'category');
+        if ($request->file('icon')) {
+            $category->icon = uploadImage($request->file('icon'), 'category');
         }
         $category->status = $request->status;
         $category->created_by = Auth::id();
