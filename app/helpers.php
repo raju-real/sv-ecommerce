@@ -191,3 +191,11 @@ if (!function_exists('uploadFile')) {
         return $uniqueFileName;
     }
 }
+
+if(! function_exists('siteSettings')) {
+    function siteSettings()
+    {
+        $jsonString = file_get_contents('assets/common/json/site_setting.json');
+        return json_decode($jsonString,true);
+    }
+}

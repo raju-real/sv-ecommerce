@@ -234,6 +234,7 @@
 <script src="{{ asset('assets/admin/libs/node-waves/waves.min.js') }}"></script>
 <script src="{{ asset('assets/admin/libs/select2/js/select2.min.js') }}"></script>
 <script src="{{ asset('assets/admin/libs/sweetalert2/sweetalert2.min.js') }}"></script>
+<script src="https://cdn.ckeditor.com/4.12.1/standard/ckeditor.js"></script>
 
 <script src="{{ asset('assets/admin/js/common.js') }}"></script>
 <script src="{{ asset('assets/admin/js/app.js') }}"></script>

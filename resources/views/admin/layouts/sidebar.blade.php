@@ -15,9 +15,19 @@
                 <li><a href="{{ route('admin.categories.index') }}">Category</a></li>
                 <li><a href="{{ route('admin.subcategories.index') }}">Sub Category</a></li>
                 <li><a href="{{ route('admin.sub-subcategories.index') }}">Sub Subcategory</a></li>
+                <li><a href="{{ route('admin.brands.index') }}">Brand</a></li>
                 <li><a href="{{ route('admin.sizes.index') }}">Size</a></li>
                 <li><a href="{{ route('admin.colors.index') }}">Color</a></li>
                 <li><a href="{{ route('admin.units.index') }}">Unit</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="javascript: void(0);" class="has-arrow waves-effect">
+                <i class="bx bx-cog"></i>
+                <span>Settings</span>
+            </a>
+            <ul class="sub-menu" aria-expanded="false">
+                <li><a href="{{ route('admin.site-settings') }}">Site Settings</a></li>
             </ul>
         </li>
     </ul>
