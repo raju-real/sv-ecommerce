@@ -38,7 +38,14 @@ class SizeController extends Controller
         $size->slug = Str::slug($request->name);
         $size->created_by = Auth::id();
         $size->save();
-        return redirect()->route('admin.sizes.index')->with(successMessage());
+        if($request->ajax()) {
+            return response()->json([
+                'status' => 'success',
+               'data' => $size->name
+            ]);
+        } else {
+         return redirect()->route('admin.sizes.index')->with(successMessage());
+        }
     }
 
 

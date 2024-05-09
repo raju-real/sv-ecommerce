@@ -23,6 +23,7 @@ Route::group(['as' => 'admin.', 'middleware' => ['auth:admin']], function () {
     Route::resource('sizes',\App\Http\Controllers\Admin\SizeController::class);
     Route::resource('colors',\App\Http\Controllers\Admin\ColorController::class);
     Route::resource('units',\App\Http\Controllers\Admin\UnitController::class);
+    Route::resource('products',\App\Http\Controllers\Admin\ProductController::class);
 
     Route::controller(\App\Http\Controllers\Admin\SettingController::class)->group(function () {
        Route::get('site-settings','siteSettings')->name('site-settings');

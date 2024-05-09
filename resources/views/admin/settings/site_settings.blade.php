@@ -186,7 +186,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">Support Policy</label>
                                     <textarea class="form-control" name="support_policy"
-                                              id="support_policy">{{ old('youtube_url') ?? siteSettings()['support_policy'] ?? '' }}</textarea>
+                                              id="support_policy">{{ old('support_policy') ?? siteSettings()['support_policy'] ?? '' }}</textarea>
                                     @error('support_policy')
                                     {!! displayError($message) !!}
                                     @enderror
@@ -196,7 +196,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">Return Policy</label>
                                     <textarea class="form-control" name="return_policy"
-                                              id="support_policy">{{ old('return_policy') ?? siteSettings()['return_policy'] ?? '' }}</textarea>
+                                              id="return_policy">{{ old('return_policy') ?? siteSettings()['return_policy'] ?? '' }}</textarea>
                                     @error('return_policy')
                                     {!! displayError($message) !!}
                                     @enderror

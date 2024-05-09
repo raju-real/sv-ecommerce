@@ -38,7 +38,14 @@ class ColorController extends Controller
         $color->slug = Str::slug($request->name);
         $color->created_by = Auth::id();
         $color->save();
-        return redirect()->route('admin.colors.index')->with(successMessage());
+        if($request->ajax()) {
+            return response()->json([
+                'status' => 'success',
+                'data' => $color->name
+            ]);
+        } else {
+            return redirect()->route('admin.colors.index')->with(successMessage());
+        }
     }
 
 

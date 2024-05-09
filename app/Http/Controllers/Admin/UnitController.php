@@ -38,7 +38,14 @@ class UnitController extends Controller
         $unit->slug = Str::slug($request->name);
         $unit->created_by = Auth::id();
         $unit->save();
-        return redirect()->route('admin.units.index')->with(successMessage());
+        if($request->ajax()) {
+            return response()->json([
+                'status' => 'success',
+                'data' => $unit->name
+            ]);
+        } else {
+            return redirect()->route('admin.units.index')->with(successMessage());
+        }
     }
 
 

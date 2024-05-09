@@ -45,7 +45,15 @@ class BrandController extends Controller
         $brand->status = $request->status;
         $brand->created_by = Auth::id();
         $brand->save();
-        return redirect()->route('admin.brands.index')->with(successMessage());
+        if($request->ajax()) {
+            return response()->json([
+                'status' => 'success',
+                'id' => $brand->id,
+                'name' => $brand->name
+            ]);
+        } else {
+            return redirect()->route('admin.brands.index')->with(successMessage());
+        }
     }
 
 

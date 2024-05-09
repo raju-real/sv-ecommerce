@@ -1,5 +1,15 @@
 (function($){
     "use strict";
+
+    /**
+     * Ajax csrf token setup
+     */
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
     $(".select2").select2();
     $(".select2-search-disable").select2({minimumResultsForSearch: 1 / 0})
 
