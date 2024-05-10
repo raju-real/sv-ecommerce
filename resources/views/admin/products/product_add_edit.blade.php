@@ -20,88 +20,73 @@
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ $route }}" method="POST" id="prevent-form" enctype="multipart/form-data">
+                    <form action="{{ $route }}" method="POST" id="product-form" enctype="multipart/form-data">
                         @csrf
                         @isset($category)
                             @method('PUT')
                         @endisset
                         <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">SKU {!! starSign() !!}</label>
-                                    <input type="text" name="sku" value="{{ old('sku') ?? $category->sku ?? '' }}"
-                                           class="form-control {{ hasError('sku') }}"
-                                           placeholder="SKU">
-                                </div>
-                            </div>
+
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">Product Code {!! starSign() !!}</label>
                                     <input type="text" name="product_code"
-                                           value="{{ old('product_code') ?? $category->product_code ?? '' }}"
-                                           class="form-control {{ hasError('product_code') }}"
+                                           value="{{ $product->product_code ?? '' }}"
+                                           class="form-control product_product_code product-input-control"
                                            placeholder="Product Code">
-                                    @error('product_code')
-                                    {!! displayError($message) !!}
-                                    @enderror
+                                    <span id="product_product_code_error"
+                                          class="text-danger font-weight-bold product-error-message"></span>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">Name {!! starSign() !!}</label>
-                                    <input type="text" name="name" value="{{ old('name') ?? $category->name ?? '' }}"
-                                           class="form-control {{ hasError('name') }}"
+                                    <input type="text" name="name" value="{{ $product->name ?? '' }}"
+                                           class="form-control product_name product-input-control"
                                            placeholder="Name">
-                                    @error('name')
-                                    {!! displayError($message) !!}
-                                    @enderror
+                                    <span id="product_name_error"
+                                          class="text-danger font-weight-bold product-error-message"></span>
                                 </div>
                             </div>
+
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">Category {!! starSign() !!}</label>
                                     <select name="category" id="category"
-                                            class="form-control select2">
+                                            class="form-control select2 product_category product-input-control">
                                         <option value="">Select Category</option>
                                         @foreach($categories as $category)
                                             <option
                                                 value="{{ $category->id }}" {{ isset($product) && $product->category_id == $category->id ? 'selected' : '' }}>{{ $category->name ?? '' }}</option>
                                         @endforeach
                                     </select>
+                                    <span id="product_category_error"
+                                          class="text-danger font-weight-bold product-error-message"></span>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">Sub Category</label>
                                     <select name="subcategory" id="subcategory"
-                                            class="form-control select2 {{ hasError('subcategory') }} "
-                                            data-old-value="{{ $sub_subcategory->subcategory_id ?? old('subcategory')  }}">
+                                            class="form-control select2 product_subcategory product-input-control"
+                                            data-old-value="{{ $product->subcategory_id ?? '' }}">
                                         <option value="">Select Sub Category</option>
-                                        @isset($sub_subcategory)
-                                            <option value="{{ $sub_subcategory->subcategory_id }}"
-                                                    selected>{{ $sub_subcategory->subcategory->name ?? '' }}</option>
-                                        @endisset
                                     </select>
-                                    @error('subcategory')
-                                    {!! displayError($message) !!}
-                                    @enderror
+                                    <span id="product_subcategory_error"
+                                          class="text-danger font-weight-bold product-error-message"></span>
                                 </div>
                             </div>
+
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">Sub Subcategory</label>
                                     <select name="sub_subcategory" id="sub_subcategory"
-                                            class="form-control select2 {{ hasError('sub_subcategory') }} "
-                                            data-old-value="{{ $sub_subcategory->sub_subcategory_id ?? old('sub_subcategory')  }}">
+                                            class="form-control select2 product_sub_subcategory product-input-control"
+                                            data-old-value="{{ $product->sub_subcategory_id ?? ''  }}">
                                         <option value="">Select Sub Subcategory</option>
-                                        @isset($sub_subcategory)
-                                            <option value="{{ $sub_subcategory->sub_subcategory_id }}"
-                                                    selected>{{ $sub_subcategory->sub_subcategory->name ?? '' }}</option>
-                                        @endisset
                                     </select>
-                                    @error('sub_subcategory')
-                                    {!! displayError($message) !!}
-                                    @enderror
+                                    <span id="product_sub_subcategory_error"
+                                          class="text-danger font-weight-bold product-error-message"></span>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -114,16 +99,18 @@
                                         </a>
                                     </label>
                                     <select name="brand" id="brand"
-                                            class="form-control select2 {{ hasError('brand') }} ">
+                                            class="form-control select2 product_brand product-input-control">
                                         <option value="">Select Brand</option>
                                         @foreach($brands as $brand)
                                             <option
-                                                value="{{ $brand->id }}" {{ old('brand') == $brand->id || isset($product) && $product->brand_id == $brand->id ? 'selected' : '' }}>{{ $brand->name ?? '' }}</option>
+                                                value="{{ $brand->id }}" {{ isset($product) && $product->brand_id == $brand->id ? 'selected' : '' }}>{{ $brand->name ?? '' }}</option>
                                         @endforeach
                                     </select>
-
+                                    <span id="product_brand_error"
+                                          class="text-danger font-weight-bold product-error-message"></span>
                                 </div>
                             </div>
+
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label d-flex align-items-center justify-content-between">
@@ -133,16 +120,16 @@
                                             <i class="fa fa-plus-circle fa-xl"></i>
                                         </a>
                                     </label>
-                                    <select name="unit" id="unit" class="form-control select2 {{ hasError('unit') }} ">
-                                        <option value="">Select Brand</option>
+                                    <select name="unit" id="unit"
+                                            class="form-control select2 product_unit product-input-control">
+                                        <option value="">Select Unit</option>
                                         @foreach($units as $unit)
                                             <option
-                                                value="{{ $unit->id }}" {{ old('unit') == $unit->id || isset($product) && $product->product_unit == $unit->id ? 'selected' : '' }}>{{ $unit->name ?? '' }}</option>
+                                                value="{{ $unit->id }}">{{ $unit->name ?? '' }}</option>
                                         @endforeach
                                     </select>
-                                    @error('unit')
-                                    {!! displayError($message) !!}
-                                    @enderror
+                                    <span id="product_unit_error"
+                                          class="text-danger font-weight-bold product-error-message"></span>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -154,18 +141,20 @@
                                             <i class="fa fa-plus-circle fa-xl"></i>
                                         </a>
                                     </label>
-                                    <select name="sizes[]" id="size" class="form-control select2" multiple="multiple"
+                                    <select name="sizes[]" id="size"
+                                            class="form-control product_sizes select2 product-input-control"
+                                            multiple="multiple"
                                             data-placeholder="Sizes ...">
                                         <option value="">Select Sizes</option>
                                         @foreach($sizes as $size)
                                             <option value="{{ $size->name }}">{{ $size->name ?? '' }}</option>
                                         @endforeach
                                     </select>
-                                    @error('unit')
-                                    {!! displayError($message) !!}
-                                    @enderror
+                                    <span id="product_sizes_error"
+                                          class="text-danger font-weight-bold product-error-message"></span>
                                 </div>
                             </div>
+
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label d-flex align-items-center justify-content-between">
@@ -175,90 +164,163 @@
                                             <i class="fa fa-plus-circle fa-xl"></i>
                                         </a>
                                     </label>
-                                    <select name="colors[]" id="color" class="form-control select2" multiple="multiple"
+                                    <select name="colors[]" id="color"
+                                            class="form-control select2 product_colors product-input-control"
+                                            multiple="multiple"
                                             data-placeholder="Colors ...">
                                         <option value="">Select Colors</option>
                                         @foreach($colors as $color)
                                             <option value="{{ $color->name }}">{{ $color->name ?? '' }}</option>
                                         @endforeach
                                     </select>
-                                    @error('unit')
-                                    {!! displayError($message) !!}
-                                    @enderror
+                                    <span id="product_colors_error"
+                                          class="text-danger font-weight-bold product-error-message"></span>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
+                                    <label class="form-label d-flex align-items-center justify-content-between">
+                                        <span>Tags</span>
+                                        <a type="button" class="text-primary" data-bs-toggle="modal"
+                                           data-bs-target="#tag-add-modal">
+                                            <i class="fa fa-plus-circle fa-xl"></i>
+                                        </a>
+                                    </label>
+                                    <select name="tags[]" id="tag"
+                                            class="form-control select2 product_tags product-input-control"
+                                            multiple="multiple"
+                                            data-placeholder="Tags ...">
+                                        <option value="">Select Tags</option>
+                                        @foreach($tags as $tag)
+                                            <option value="{{ $tag->name }}">{{ $tag->name ?? '' }}</option>
+                                        @endforeach
+                                    </select>
+                                    <span id="product_tags_error"
+                                          class="text-danger font-weight-bold product-error-message"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
                                     <label class="form-label">Unit Price {!! starSign() !!}</label>
                                     <input type="text" name="unit_price" value="{{ $product->unit_price ?? '' }}"
-                                           class="form-control"
+                                           class="form-control product_unit_price product-input-control"
                                            placeholder="Unit Price">
+                                    <span id="product_unit_price_error"
+                                          class="text-danger font-weight-bold product-error-message"></span>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">Discount Price</label>
                                     <input type="text" name="discount_price" value="{{ $product->discount_price ?? 0 }}"
-                                           class="form-control"
+                                           class="form-control product_discount_price product-input-control"
                                            placeholder="Discount Price">
+                                    <span id="product_discount_price_error"
+                                          class="text-danger font-weight-bold product-error-message"></span>
                                 </div>
                             </div>
+
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">Short Description</label>
-                                    <textarea name="short_description" class="form-control"
+                                    <textarea name="short_description"
+                                              class="form-control product_short_description product-input-control"
                                               placeholder="Short Description">{{ $product->short_description ?? '' }}</textarea>
+                                    <span id="product_short_description_error"
+                                          class="text-danger font-weight-bold product-error-message"></span>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Special Note</label>
-                                    <textarea name="special_note" class="form-control"
+                                    <textarea name="special_note"
+                                              class="form-control product_special_note product-input-control"
                                               placeholder="Special Note">{{ $product->special_note ?? '' }}</textarea>
+                                    <span id="product_special_note_error"
+                                          class="text-danger font-weight-bold product-error-message"></span>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Video Link</label>
                                     <input type="text" name="video_link" value="{{ $product->video_link ?? '' }}"
-                                           class="form-control"
+                                           class="form-control product_video_link product-input-control"
                                            placeholder="Video Link">
+                                    <span id="product_video_link_error"
+                                          class="text-danger font-weight-bold product-error-message"></span>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">Product Details</label>
-                                    <textarea class="form-control" name="product_details"
-                                              id="product_details">{{ old('product_details') ?? $product->product_details ?? '' }}</textarea>
-                                    @error('product_details')
-                                    {!! displayError($message) !!}
-                                    @enderror
+                                    <textarea name="product_details"
+                                              class="form-control product_product_details product-input-control"
+                                              id="product_details">{{ $product->product_details ?? '' }}</textarea>
+                                    <span id="product_product_details_error"
+                                          class="text-danger font-weight-bold product-error-message"></span>
                                 </div>
                             </div>
+
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="row mb-3">
                                         <div class="col-md-6 mb-3">
+                                            <label class="form-label">SKU {!! starSign() !!}</label>
+                                            <input type="text" name="sku" value="{{ $product->sku ?? '' }}"
+                                                   class="form-control product_sku product-input-control"
+                                                   placeholder="SKU">
+                                            <span id="product_sku_error"
+                                                  class="text-danger font-weight-bold product-error-message"></span>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Alert Quantity {!! starSign() !!}</label>
+                                            <input type="text" name="alert_quantity"
+                                                   value="{{ $product->alert_quantity ?? 0 }}"
+                                                   class="form-control product_alert_quantity product-input-control"
+                                                   placeholder="Alert Quantity">
+                                            <span id="product_alert_quantity_error"
+                                                  class="text-danger font-weight-bold product-error-message"></span>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
                                             <label class="form-label">Refundable {!! starSign() !!}</label>
                                             <select name="is_refundable"
-                                                    class="form-select select2-search-disable">
-                                                <option value="0">No</option>
-                                                <option value="1">Yes</option>
+                                                    class="form-select select2-search-disable product_is_refundable product-input-control">
+                                                <option
+                                                    value="0" {{ isset($product) && $product->is_refundable == 0 ? 'selected' : '' }}>
+                                                    No
+                                                </option>
+                                                <option
+                                                    value="1" {{ isset($product) && $product->is_refundable == 1 ? 'selected' : '' }}>
+                                                    Yes
+                                                </option>
                                             </select>
+                                            <span id="product_is_refundable_error"
+                                                  class="text-danger font-weight-bold product-error-message"></span>
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label">Exchangeable {!! starSign() !!}</label>
                                             <select name="is_exchangeable"
-                                                    class="form-select select2-search-disable">
-                                                <option value="0">No</option>
-                                                <option value="1">Yes</option>
+                                                    class="form-select select2-search-disable product_is_exchangeable product-input-control">
+                                                <option
+                                                    value="0" {{ isset($product) && $product->is_exchangeable == 0 ? 'selected' : '' }}>
+                                                    No
+                                                </option>
+                                                <option
+                                                    value="1" {{ isset($product) && $product->is_exchangeable == 1 ? 'selected' : '' }}>
+                                                    Yes
+                                                </option>
                                             </select>
+                                            <span id="product_is_exchangeable_error"
+                                                  class="text-danger font-weight-bold product-error-message"></span>
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label">Status {!! starSign() !!}</label>
                                             <select name="status"
-                                                    class="form-select select2-search-disable {{ hasError('status') }}">
+                                                    class="form-select select2-search-disable product_status product-input-control">
                                                 @foreach(getStatus() as $status)
                                                     <option
                                                         value="{{ $status->value }}" {{ isset($product) && $product->status === $status->value ? 'selected' : '' }}>{{ $status->title }}</option>
                                                 @endforeach
                                             </select>
+                                            <span id="product_status_error"
+                                                  class="text-danger font-weight-bold product-error-message"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -267,14 +329,16 @@
                                     <div class="mb-3">
                                         <label class="form-label">Product Thumbnail (Type:jpg,jpeg,png, Max:
                                             1MB) {!! starSign() !!}</label>
-                                        <input type="file" name="icon" class="form-control {{ hasError('icon') }}"
-                                               accept=".jpg,jpeg,.png">
-                                        @error('icon')
-                                        {!! displayError($message) !!}
-                                        @enderror
+                                        <input type="file" name="product_thumbnail"
+                                               class="form-control product_product_thumbnail product-input-control"
+                                               accept=".jpg,.jpeg,.png">
+                                        <span id="product_product_thumbnail_error"
+                                              class="text-danger font-weight-bold product-error-message"></span>
                                     </div>
 
                                     <div class="mb-3">
+                                        <b id="product_images_error"
+                                                  class="text-danger font-weight-bold product-error-message"></b>
                                         <table class="table w-100" id="image_table">
                                             <thead>
                                             <tr class="form-label">
@@ -286,6 +350,7 @@
 
                                             </tbody>
                                         </table>
+
                                         <button type="button" class="btn btn-md btn-success" id="add_image">Add Image
                                         </button>
                                     </div>
@@ -293,7 +358,8 @@
                             </div>
                         </div>
                         <div>
-                            <x-submit-button></x-submit-button>
+                            <button class="btn btn-primary submit-button" id="product-submit" type="button">Submit
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -372,8 +438,6 @@
         </div>
     </div>
 
-
-
     <div class="modal fade" id="size-add-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -421,6 +485,32 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary color-add-button">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="tag-add-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add New Tag</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="tag-add-form" method="POST">
+                        @csrf
+                        <div class="col-12 mb-3">
+                            <label class="col-form-label">Name {!! starSign() !!}</label>
+                            <input type="text" name="name" placeholder="Name" class="form-control tag-form-input">
+                            <span id="tag_name_error"
+                                  class="text-danger font-weight-bold"></span>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary tag-add-button">Submit</button>
                 </div>
             </div>
         </div>

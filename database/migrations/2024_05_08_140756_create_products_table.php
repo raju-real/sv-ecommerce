@@ -28,7 +28,8 @@ return new class extends Migration
             $table->string('warranty',191)->nullable();
             $table->double('unit_price',8,2)->nullable();
             $table->double('discount_price',8,2)->default(0);
-            $table->integer('sku')->nullable();
+            $table->integer('sku')->default(0);
+            $table->integer('alert_quantity')->default(0);
             $table->string('video_link')->nullable();
             $table->integer('view_count')->default(0);
             $table->string('thumbnail_path',255)->nullable();
@@ -41,6 +42,7 @@ return new class extends Migration
             $table->string('status',10)->default("active")->comment("active,in-active");
             $table->timestamps();
             $table->integer('created_by');
+            $table->integer('updated_by');
             $table->softDeletes();
         });
     }

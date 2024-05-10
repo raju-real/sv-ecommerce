@@ -66,10 +66,10 @@ class SubSubcategoryController extends Controller
 
     public function edit($slug)
     {
-        $subcategory = SubCategory::whereSlug($slug)->first();
+        $sub_subcategory = SubSubcategory::whereSlug($slug)->first();
         $categories = Category::orderBy('name')->select('id', 'name')->get();
-        $route = route('admin.subcategories.update', $subcategory->id);
-        return view('admin.attributes.sub_category_add_edit', compact('subcategory', 'categories', 'route'));
+        $route = route('admin.sub-subcategories.update', $sub_subcategory->id);
+        return view('admin.attributes.sub_subcategory_add_edit', compact('sub_subcategory', 'categories', 'route'));
     }
 
 
@@ -96,7 +96,7 @@ class SubSubcategoryController extends Controller
             'status' => 'required|max:10|in:active,in-active'
         ]);
 
-        $sub_category = SubCategory::findOrFail($id);
+        $sub_category = SubSubcategory::findOrFail($id);
         $sub_category->category_id = $request->category;
         $sub_category->subcategory_id = $request->subcategory;
         $sub_category->name = $request->name;
@@ -107,7 +107,7 @@ class SubSubcategoryController extends Controller
         $sub_category->status = $request->status;
         $sub_category->created_by = Auth::id();
         $sub_category->save();
-        return redirect()->route('admin.subcategories.index')->with(infoMessage());
+        return redirect()->route('admin.sub-subcategories.index')->with(infoMessage());
     }
 
 

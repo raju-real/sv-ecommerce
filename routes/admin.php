@@ -23,6 +23,8 @@ Route::group(['as' => 'admin.', 'middleware' => ['auth:admin']], function () {
     Route::resource('sizes',\App\Http\Controllers\Admin\SizeController::class);
     Route::resource('colors',\App\Http\Controllers\Admin\ColorController::class);
     Route::resource('units',\App\Http\Controllers\Admin\UnitController::class);
+    Route::resource('tags',\App\Http\Controllers\Admin\TagController::class);
+    //Products
     Route::resource('products',\App\Http\Controllers\Admin\ProductController::class);
 
     Route::controller(\App\Http\Controllers\Admin\SettingController::class)->group(function () {

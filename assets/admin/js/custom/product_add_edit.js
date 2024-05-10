@@ -12,6 +12,7 @@
         CKEDITOR.replace('product_details', config);
 
     const subCategorySelector = $('#subcategory');
+    const subSubcategorySelector = $('#sub_subcategory');
 
     const category_id = $('#category').val();
     if (category_id) {
@@ -19,12 +20,28 @@
     }
 
     $(document).on('change', '#category', function () {
+        subCategorySelector.empty().append('<option value="">Select Subcategory</option>');
+        subSubcategorySelector.empty().append('<option value="">Select Sub Subcategory</option>');
         const category_id = $(this).val();
         appendSubCategory(category_id);
     });
 
+    $(document).on('change', '#subcategory', function () {
+        const sub_category_id = $(this).val();
+        $.ajax({
+            url: base_url + "/api/subcategory-wise-sub-subcategories/" + sub_category_id,
+            success: function (response) {
+                $.each(response, function (i, sub_subcategory) {
+                    subSubcategorySelector.append($('<option>', {
+                        value: sub_subcategory.id,
+                        text: sub_subcategory.name
+                    }));
+                });
+            }
+        });
+    });
+
     function appendSubCategory(category_id) {
-        subCategorySelector.empty().append('<option value="">Select Subcategory</option>');
         $.ajax({
             url: base_url + "/api/category-wise-subcategories/" + category_id,
             success: function (response) {
@@ -202,10 +219,48 @@
         });
     });
 
+    $(document).on('click', '.tag-add-button', function (event) {
+        event.preventDefault();
+        $.ajax({
+            url: base_url + '/tags',
+            method: 'POST',
+            data: $('#tag-add-form').serialize(),
+            dataType: 'json',
+            success: function (response) {
+                $('.tag-form-input').removeClass('is-invalid');
+                $('#tag_name_error').empty();
+                const tagSelector = $('#tag');
+                const newTag = response.data; // or use response.value if available
+
+                if ($('#tag option[value="' + newTag + '"]').length === 0) {
+                    tagSelector.append($('<option>', {
+                        value: newTag,
+                        text: newTag
+                    }));
+                }
+
+                tagSelector.val(tagSelector.val().concat(newTag)); // Select the newly added option
+                tagSelector.trigger('change');
+                $('#tag-add-form').trigger('reset');
+                $('#tag-add-modal').modal('hide');
+            },
+            error: function (error) {
+                if (error.status === 422) {
+                    let errors = error.responseJSON.errors;
+                    $('.tag-form-input').removeClass('is-invalid');
+                    $.each(errors, function (field, messages) {
+                        $('.tag-form-input').addClass('is-invalid');
+                        $('#tag_name_error').empty().text(messages[0]);
+                    });
+                }
+            }
+        });
+    });
+
     $(document).on('click', '#add_image', function() {
         let file_div = `<tr>
             <td class="w-90">
-                <input type="file" name="images[]" class="form-control">
+                <input type="file" name="images[]" class="form-control" accept=".jpg,.jpeg,.png">
             </td>
             <td class="w-10 pull-right">
                 <button type="button" class="btn btn-md btn-danger text-right remove_image">
@@ -220,6 +275,90 @@
     $(document).on('click', '.remove_image', function(){
         let event = this;
         $(event).parent().parent().remove();
+    });
+
+    $(document).on('click', '#product-submit', function (event) {
+        event.preventDefault();
+
+        const formData = new FormData($('#product-form')[0]);
+
+        const productDetails = CKEDITOR.instances["product_details"].getData();
+        formData.append('product_details', productDetails);
+
+        $.ajax({
+            url: base_url + '/products',
+            method: 'POST',
+            data: formData,
+            dataType: 'json',
+            contentType: false, // Set content type to false for FormData
+            processData: false, // Prevent jQuery from processing the data
+            success: function (response) {
+                // Reset form styling and error messages
+                $('.form-control').removeClass('border-danger');
+                $('.product-error-message').empty();
+
+                if (response.status === "success") {
+                    Swal.fire({
+                        text: response.message,
+                        icon: "success",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#6495ed",
+                        confirmButtonText: "Go to product lists",
+                        cancelButtonText: "Add More"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = base_url + '/products';
+                        } else {
+                            $('#product-form').trigger('reset');
+                            $('.changeable-select2').each(function () {
+                                $(this).val('').trigger('change'); // Set value to empty string and trigger change event
+                            });
+                            CKEDITOR.instances.product_details.setData('');
+                            CKEDITOR.instances.specification.setData('');
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: response.message
+                    });
+                }
+            },
+            error: function (error) {
+                if (error.status === 422) {
+                    let errors = error.responseJSON.errors;
+                    $('.product-input-control').removeClass('border-danger');
+                    $('.product-error-message').empty();
+
+                    $.each(errors, function (field, messages) {
+                        $('.product_' + field).addClass('border-danger');
+                        $('#product_' + field + '_error').empty().text(messages[0]);
+
+                        if (field.startsWith('sizes')) {
+                            let errorMessage = 'Sizes must be valid and not exceed 50 characters each and the total length must not exceed 450 characters.';
+                            $('.product_sizes').addClass('border-danger');
+                            $('#product_sizes_error').text(errorMessage);
+                        }
+                        if (field.startsWith('colors')) {
+                            let errorMessage = 'Colors must be valid and not exceed 50 characters each and the total length must not exceed 450 characters.';
+                            $('.product_colors').addClass('border-danger');
+                            $('#product_colors_error').text(errorMessage);
+                        }
+                        if (field.startsWith('tags')) {
+                            let errorMessage = 'Tags must be valid and not exceed 50 characters each and the total length must not exceed 450 characters.';
+                            $('.product_tags').addClass('border-danger');
+                            $('#product_tags_error').text(errorMessage);
+                        }
+                        if (field.startsWith('images')) {
+                            let errorMessage = 'Please upload valid image files type of (jpg, jpeg or png) up to 1MB each.';
+                            $('#product_images_error').text(errorMessage);
+                        }
+                    });
+                }
+            }
+        });
     });
 
 })(jQuery);

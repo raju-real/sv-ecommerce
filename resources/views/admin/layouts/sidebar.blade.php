@@ -29,6 +29,7 @@
                 <li><a href="{{ route('admin.sizes.index') }}"><i class="bx bx-chevron-right"></i> Size</a></li>
                 <li><a href="{{ route('admin.colors.index') }}"><i class="bx bx-chevron-right"></i> Color</a></li>
                 <li><a href="{{ route('admin.units.index') }}"><i class="bx bx-chevron-right"></i> Unit</a></li>
+                <li><a href="{{ route('admin.tags.index') }}"><i class="bx bx-chevron-right"></i> Tag</a></li>
             </ul>
         </li>
         <li>

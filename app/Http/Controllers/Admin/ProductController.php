@@ -9,8 +9,11 @@ use App\Models\Category;
 use App\Models\Color;
 use App\Models\Product;
 use App\Models\Size;
+use App\Models\Tag;
 use App\Models\Unit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -28,15 +31,17 @@ class ProductController extends Controller
         $sizes = Size::orderBy('name')->get();
         $colors = Color::orderBy('name')->get();
         $units = Unit::orderBy('name')->get();
+        $tags = Tag::orderBy('name')->get();
         $route = route('admin.products.store');
-        return view('admin.products.product_add_edit', compact('route','categories','brands','sizes','colors','units'));
+        return view('admin.products.product_add_edit', compact('route','categories','brands','sizes','colors','units','tags'));
     }
 
     public function store(ProductRequest $request)
     {
-        $product = new Category();
-        $product->name = $request->name;
-        $product->slug = Str::slug($request->name);
+        $validatedData = $request->validated();
+        $product = new Product();
+        $product->name = $validatedData['name'];
+        $product->slug = Str::slug($validatedData['product_code'].'-'.$validatedData['name']);
         if ($request->file('icon')) {
             $product->icon = uploadImage($request->file('icon'), 'products');
         }
