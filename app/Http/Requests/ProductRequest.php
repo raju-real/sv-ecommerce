@@ -32,16 +32,19 @@ class ProductRequest extends FormRequest
         //dd($this->all());
         $recordId = $this->route('product') ? $this->route('product') : null;
         return [
-            'product_code' => ['required','max:6','unique:products'],
+            'product_code' => ['required','max:10','unique:products'],
             'name' => ['required','string','max:191'],
             'category' => ['required','int','exists:categories,id'],
             'subcategory' => ['nullable','sometimes','int','exists:sub_categories,id'],
             'sub_subcategory' => ['nullable','sometimes','int','exists:sub_subcategories,id'],
             'brand' => ['nullable','sometimes','int','exists:brands,id'],
             'unit' => ['nullable','sometimes','int','exists:units,id'],
-            'sizes.*' => ['nullable', 'sometimes', new ProductSizeRule()],
-            'colors.*' => ['nullable', 'sometimes', new ProductColorRule()],
-            'tags.*' => ['nullable', 'sometimes', new ProductTagRule()],
+            'sizes' => ['nullable','sometimes','array'],
+            'sizes.*' => ['required', new ProductSizeRule()],
+            'colors' => ['nullable','sometimes','array'],
+            'colors.*' => ['required', new ProductColorRule()],
+            'tags' => ['nullable','sometimes','array'],
+            'tags.*' => ['required', new ProductTagRule()],
             'unit_price' => ['required', 'gt:0', 'numeric', new PriceValidateRule()],
             'discount_price' => ['required', 'numeric', new DiscountPriceRule, new PriceValidateRule()],
             'short_description' => ['nullable','sometimes','string','max:2000'],
@@ -54,7 +57,9 @@ class ProductRequest extends FormRequest
             'is_refundable' => ['required','in:0,1'],
             'is_exchangeable' => ['required','in:0,1'],
             'status' => ['required','in:active,in-active'],
-            'images.*' => ['nullable', 'sometimes', 'image', 'mimes:jpeg,jpg,png', 'max:1024']
+            'warranty' => ['nullable','sometimes','max:2000'],
+            'images' => ['nullable','sometimes','array'],
+            'images.*' => ['required', 'image', 'mimes:jpeg,jpg,png', 'max:1024']
         ];
     }
 }

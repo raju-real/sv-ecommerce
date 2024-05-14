@@ -28,11 +28,11 @@ class ProductTagRule implements Rule
     {
         $tags = explode(',', $value);
         foreach ($tags as $tag) {
-            if (Tag::whereName($tag)->doesntExist() || strlen($tag) > 50) {
+            if (Tag::whereName($tag)->doesntExist() || strlen($tag) > 100) {
                 return false;
             }
         }
-        if (strlen($value) > 450) {
+        if (strlen($value) > 2000) {
             return false;
         }
         return true;

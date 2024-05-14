@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('tags', function (Blueprint $table) {
             $table->id();
-            $table->string('name',50);
-            $table->string('slug',191);
+            $table->string('name',100);
+            $table->string('slug',255);
             $table->timestamps();
             $table->integer('created_by');
             $table->softDeletes();

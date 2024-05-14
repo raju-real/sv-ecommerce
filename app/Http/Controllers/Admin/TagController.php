@@ -29,7 +29,7 @@ class TagController extends Controller
             'name' => [
                 'required',
                 'string',
-                'max:50',
+                'max:100',
                 Rule::unique('tags', 'name')->whereNull('deleted_at')
             ],
         ]);
@@ -63,7 +63,7 @@ class TagController extends Controller
             'name' => [
                 'required',
                 'string',
-                'max:50',
+                'max:100',
                 Rule::unique('tags', 'name')->whereNull('deleted_at')->ignore($id),
             ],
         ]);

@@ -230,6 +230,7 @@
                                     <span id="product_short_description_error"
                                           class="text-danger font-weight-bold product-error-message"></span>
                                 </div>
+
                                 <div class="mb-3">
                                     <label class="form-label">Special Note</label>
                                     <textarea name="special_note"
@@ -238,18 +239,20 @@
                                     <span id="product_special_note_error"
                                           class="text-danger font-weight-bold product-error-message"></span>
                                 </div>
+
                                 <div class="mb-3">
-                                    <label class="form-label">Video Link</label>
-                                    <input type="text" name="video_link" value="{{ $product->video_link ?? '' }}"
-                                           class="form-control product_video_link product-input-control"
-                                           placeholder="Video Link">
-                                    <span id="product_video_link_error"
+                                    <label class="form-label">Warranty</label>
+                                    <textarea name="warranty"
+                                              class="form-control product_warranty product-input-control"
+                                              placeholder="Warranty">{{ $product->warranty ?? '' }}</textarea>
+                                    <span id="product_warranty_error"
                                           class="text-danger font-weight-bold product-error-message"></span>
                                 </div>
+
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Product Details</label>
+                                    <label class="form-label">Product Details {!! starSign() !!}</label>
                                     <textarea name="product_details"
                                               class="form-control product_product_details product-input-control"
                                               id="product_details">{{ $product->product_details ?? '' }}</textarea>
@@ -311,6 +314,16 @@
                                                   class="text-danger font-weight-bold product-error-message"></span>
                                         </div>
                                         <div class="col-md-6 mb-3">
+                                            <label class="form-label">Video Link</label>
+                                            <input type="text" name="video_link"
+                                                   value="{{ $product->video_link ?? '' }}"
+                                                   class="form-control product_video_link product-input-control"
+                                                   placeholder="Video Link">
+                                            <span id="product_video_link_error"
+                                                  class="text-danger font-weight-bold product-error-message"></span>
+                                        </div>
+
+                                        <div class="col-md-6 mb-3">
                                             <label class="form-label">Status {!! starSign() !!}</label>
                                             <select name="status"
                                                     class="form-select select2-search-disable product_status product-input-control">
@@ -338,7 +351,7 @@
 
                                     <div class="mb-3">
                                         <b id="product_images_error"
-                                                  class="text-danger font-weight-bold product-error-message"></b>
+                                           class="text-danger font-weight-bold product-error-message"></b>
                                         <table class="table w-100" id="image_table">
                                             <thead>
                                             <tr class="form-label">

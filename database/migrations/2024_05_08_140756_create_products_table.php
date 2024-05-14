@@ -25,7 +25,7 @@ return new class extends Migration
             $table->longText('product_details')->nullable();
             $table->text('short_description')->nullable();
             $table->text('special_note')->nullable();
-            $table->string('warranty',191)->nullable();
+            $table->text('warranty')->nullable();
             $table->double('unit_price',8,2)->nullable();
             $table->double('discount_price',8,2)->default(0);
             $table->integer('sku')->default(0);
@@ -36,7 +36,7 @@ return new class extends Migration
             $table->string('product_unit')->nullable();
             $table->string('product_sizes',500)->nullable();
             $table->string('product_colors',500)->nullable();
-            $table->string('product_tags',500)->nullable();
+            $table->text('product_tags')->nullable();
             $table->boolean('is_exchangeable')->default(false);
             $table->boolean('is_refundable')->default(false);
             $table->string('status',10)->default("active")->comment("active,in-active");
