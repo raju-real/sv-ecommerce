@@ -310,12 +310,7 @@
                         if (result.isConfirmed) {
                             window.location.href = base_url + '/products';
                         } else {
-                            $('#product-form').trigger('reset');
-                            $('.changeable-select2').each(function () {
-                                $(this).val('').trigger('change'); // Set value to empty string and trigger change event
-                            });
-                            CKEDITOR.instances.product_details.setData('');
-                            CKEDITOR.instances.specification.setData('');
+                            window.location.href = base_url + '/products/create';
                         }
                     });
                 } else {

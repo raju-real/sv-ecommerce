@@ -49,10 +49,8 @@
                     </div>
 
                 </div>
-                <div class="col-lg-12">
-                    <ul class="pagination pagination-rounded justify-content-center mt-3 mb-4 pb-1">
-                        {{ $units->links() }}
-                    </ul>
+                <div class="d-flex justify-content-center">
+                    {!! $units->links('pagination::bootstrap-4') !!}
                 </div>
             </div>
         </div>

@@ -13,7 +13,16 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::latest()->paginate(20);
+        $data = Category::query();
+        $data->latest();
+        $data->when(request()->get('name'),function($query) {
+           $name = request()->get('name');
+           $query->where('name',"LIKE","%{$name}%");
+        });
+        $data->when(request()->get('status'),function($query) {
+           $query->where('status',request()->get('status'));
+        });
+        $categories = $data->paginate(15);
         return view('admin.attributes.category_list', compact('categories'));
     }
 
@@ -30,10 +39,10 @@ class CategoryController extends Controller
                 'required',
                 'string',
                 'max:50',
-                Rule::unique('sizes', 'name')->whereNull('deleted_at')
+                Rule::unique('categories', 'name')->whereNull('deleted_at')
             ],
-            'icon' => 'nullable|sometimes|mimes:jpg,jpeg,png|max:1024',
-            'status' => 'required|max:10|in:active,in-active'
+            'icon' => 'nullable|sometimes|mimes:png|max:1024',
+            'status' => 'required|in:active,in-active'
         ]);
 
         $category = new Category();
@@ -64,10 +73,10 @@ class CategoryController extends Controller
                 'required',
                 'string',
                 'max:50',
-                Rule::unique('sizes', 'name')->whereNull('deleted_at')->ignore($id),
+                Rule::unique('categories', 'name')->whereNull('deleted_at')->ignore($id),
             ],
-            'icon' => 'nullable|sometimes|mimes:jpg,jpeg,png|max:1024',
-            'status' => 'required|max:10|in:active,in-active'
+            'icon' => 'nullable|sometimes|mimes:png|max:1024',
+            'status' => 'required|in:active,in-active'
         ]);
 
         $category = Category::findOrFail($id);

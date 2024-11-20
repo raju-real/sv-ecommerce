@@ -26,7 +26,7 @@ class DiscountPriceRule implements Rule
     public function passes($attribute, $value): bool
     {
         $unitPrice = request()->input('unit_price', 0); // Get unit_price input or default to 0
-        return $value < $unitPrice && $value >= 0 && $unitPrice > 0;
+        return $value >= 0 && $value < $unitPrice && $unitPrice > 0;
     }
 
     /**

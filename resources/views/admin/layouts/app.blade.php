@@ -16,6 +16,7 @@
     <link href="{{ asset('assets/admin/libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css"/>
 
     <link href="{{ asset('assets/admin/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('assets/admin/css/custom.css') }}" id="app-style" rel="stylesheet" type="text/css"/>
     @stack('css')
 </head>
 
@@ -234,7 +235,7 @@
 <script src="{{ asset('assets/admin/libs/node-waves/waves.min.js') }}"></script>
 <script src="{{ asset('assets/admin/libs/select2/js/select2.min.js') }}"></script>
 <script src="{{ asset('assets/admin/libs/sweetalert2/sweetalert2.min.js') }}"></script>
-<script src="https://cdn.ckeditor.com/4.12.1/standard/ckeditor.js"></script>
+<script src="{{ asset('assets/admin/js/ck-editor/ckeditor.js') }}"></script>
 
 <script src="{{ asset('assets/admin/js/common.js') }}"></script>
 <script src="{{ asset('assets/admin/js/app.js') }}"></script>

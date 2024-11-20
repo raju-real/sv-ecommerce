@@ -94,7 +94,7 @@ class ProductController extends Controller
 
     public function edit($slug)
     {
-        $product = Category::whereSlug($slug)->first();
+        $product = Product::whereSlug($slug)->first();
         $route = route('admin.products.update', $product->id);
         return view('admin.products.product_add_edit', compact('product', 'route'));
     }

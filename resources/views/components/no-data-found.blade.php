@@ -1,3 +1,3 @@
 <div class="alert alert-danger" role="alert">
-    No Data Found!
+    <span class="font-weight-500">No Data Found!</span>
 </div>

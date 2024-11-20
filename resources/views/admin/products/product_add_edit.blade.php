@@ -203,7 +203,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">Unit Price {!! starSign() !!}</label>
-                                    <input type="text" name="unit_price" value="{{ $product->unit_price ?? '' }}"
+                                    <input type="number" name="unit_price" value="{{ $product->unit_price ?? '' }}"
                                            class="form-control product_unit_price product-input-control"
                                            placeholder="Unit Price">
                                     <span id="product_unit_price_error"
@@ -213,7 +213,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">Discount Price</label>
-                                    <input type="text" name="discount_price" value="{{ $product->discount_price ?? 0 }}"
+                                    <input type="number" name="discount_price" value="{{ $product->discount_price ?? 0 }}"
                                            class="form-control product_discount_price product-input-control"
                                            placeholder="Discount Price">
                                     <span id="product_discount_price_error"
@@ -266,7 +266,7 @@
                                     <div class="row mb-3">
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label">SKU {!! starSign() !!}</label>
-                                            <input type="text" name="sku" value="{{ $product->sku ?? '' }}"
+                                            <input type="number" name="sku" value="{{ $product->sku ?? 0 }}"
                                                    class="form-control product_sku product-input-control"
                                                    placeholder="SKU">
                                             <span id="product_sku_error"
@@ -274,7 +274,7 @@
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label">Alert Quantity {!! starSign() !!}</label>
-                                            <input type="text" name="alert_quantity"
+                                            <input type="number" name="alert_quantity"
                                                    value="{{ $product->alert_quantity ?? 0 }}"
                                                    class="form-control product_alert_quantity product-input-control"
                                                    placeholder="Alert Quantity">

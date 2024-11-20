@@ -64,11 +64,11 @@ if (!function_exists('starSign')) {
 if (!function_exists('displayError')) {
     function displayError(string $error = "Something went wrong!"): string
     {
-        return "<span class='text-danger'>" . $error . "</span>";
+        return "<span class='text-danger font-weight-500'>" . $error . "</span>";
     }
 }
 
-if (!function_exists('hasErrors')) {
+if (!function_exists('hasError')) {
     function hasError(string $fieldName): string
     {
         $errors = session()->get('errors');
@@ -87,8 +87,8 @@ if (!function_exists('getStatus')) {
     function getStatus(): array
     {
         return [
-            (object) ['value' => 'active', 'title' => 'Active'],
-            (object) ['value' => 'in-active', 'title' => 'In Active']
+            (object)['value' => 'active', 'title' => 'Active'],
+            (object)['value' => 'in-active', 'title' => 'In Active']
         ];
     }
 }
@@ -165,7 +165,7 @@ if (!function_exists('userAvatar')) {
 if (!function_exists('uploadImage')) {
     function uploadImage($file, string $folderName = "partial/", $size = "", $width = "", $height = ""): string
     {
-        $folderPath = "assets/files/images/".$folderName;
+        $folderPath = "assets/files/images/" . $folderName;
         File::isDirectory($folderPath) || File::makeDirectory($folderPath, 0777, true, true);
         $imageName = time() . '-' . $file->getClientOriginalName();
         $image = Image::make($file->getRealPath());
@@ -175,8 +175,8 @@ if (!function_exists('uploadImage')) {
         if (isset($size)) {
             $image->filesize($size);
         }
-        $image->save($folderPath . "/". $imageName);
-        return $folderPath . "/". $imageName;
+        $image->save($folderPath . "/" . $imageName);
+        return $folderPath . "/" . $imageName;
     }
 }
 
@@ -192,10 +192,67 @@ if (!function_exists('uploadFile')) {
     }
 }
 
-if(! function_exists('siteSettings')) {
+if (!function_exists('segmentOne')) {
+    function segmentOne(): ?string
+    {
+        return request()->segment(1);
+    }
+}
+
+if (!function_exists('isMainMenuActive')) {
+    function isMainMenuActive(string $fieldName): string
+    {
+        $main_menus = explode(',',$fieldName);
+        return in_array(segmentOne(),$main_menus) ? 'active mm-active' : '';
+    }
+}
+
+if (!function_exists('isSubMenuActive')) {
+    function isSubMenuActive(string $fieldName): string
+    {
+        return segmentOne() == $fieldName ? 'active' : '';
+    }
+}
+
+if (!function_exists('siteSettings')) {
     function siteSettings()
     {
         $jsonString = file_get_contents('assets/common/json/site_setting.json');
-        return json_decode($jsonString,true);
+        return json_decode($jsonString, true);
+    }
+}
+
+if (!function_exists('activeCategories')) {
+    function activeCategories()
+    {
+        return \App\Models\Category::active()->select('id', 'name', 'slug')->orderBy('name')->get();
+    }
+}
+
+if (!function_exists('categoryIdBySlug')) {
+    function categoryIdBySlug($slug)
+    {
+        return \App\Models\Category::whereSlug($slug)->first()->id ?? null;
+    }
+}
+
+if (!function_exists('categoryNameBySlug')) {
+    function categoryNameBySlug($slug)
+    {
+        return \App\Models\Category::whereSlug($slug)->first()->name ?? null;
+    }
+}
+
+if (!function_exists('subCategoryIdBySlug')) {
+    function subCategoryIdBySlug($slug)
+    {
+        return \App\Models\SubCategory::whereSlug($slug)->first()->id ?? null;
+    }
+}
+
+if (!function_exists('subCategoryNameBySlug')) {
+    function subCategoryNameBySlug($slug)
+    {
+        return \App\Models\SubCategory::whereSlug($slug)->first()->name ?? null;
     }
 }

@@ -10,4 +10,9 @@ class Category extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = "categories";
+
+    public function scopeActive($query)
+    {
+        return $query->where('status','active');
+    }
 }

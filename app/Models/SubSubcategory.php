@@ -20,4 +20,9 @@ class SubSubcategory extends Model
     {
         return $this->belongsTo(SubCategory::class,'subcategory_id','id');
     }
+
+    public function scopeActive($query)
+    {
+        return $query->where('status','active');
+    }
 }

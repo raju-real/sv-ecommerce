@@ -39,8 +39,8 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label class="form-label">Icon (Type:jpg,jpeg,png, Max: 1MB)</label>
-                                    <input type="file" name="icon" class="form-control {{ hasError('icon') }}" accept=".jpg,jpeg,.png">
+                                    <label class="form-label">Icon (Type:png, Max: 1MB)</label>
+                                    <input type="file" name="icon" class="form-control {{ hasError('icon') }}" accept=".png">
                                     @error('icon')
                                     {!! displayError($message) !!}
                                     @enderror

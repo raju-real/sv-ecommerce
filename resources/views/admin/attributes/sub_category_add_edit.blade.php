@@ -29,9 +29,7 @@
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label class="form-label">Name {!! starSign() !!}</label>
-                                    <input type="text" name="name" value="{{ old('name') ?? $subcategory->name ?? '' }}"
-                                           class="form-control {{ hasError('name') }}"
-                                           placeholder="Name">
+                                    <input type="text" name="name" value="{{ old('name') ?? $subcategory->name ?? '' }}" class="form-control {{ hasError('name') }}" placeholder="Name">
                                     @error('name')
                                     {!! displayError($message) !!}
                                     @enderror
@@ -42,7 +40,7 @@
                                     <label class="form-label">Category {!! starSign() !!}</label>
                                     <select name="category" id="category" class="form-control select2 {{ hasError('category') }} ">
                                         <option value="">Select Category</option>
-                                        @foreach($categories as $category)
+                                        @foreach(activeCategories() as $category)
                                             <option value="{{ $category->id }}" {{ old('category') == $category->id || isset($subcategory) && $subcategory->category_id == $category->id ? 'selected' : '' }}>{{ $category->name ?? '' }}</option>
                                         @endforeach
                                     </select>
@@ -53,8 +51,8 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label class="form-label">Icon (Type:jpg,jpeg,png, Max: 1MB)</label>
-                                    <input type="file" name="icon" class="form-control {{ hasError('icon') }}" accept=".jpg,jpeg,.png">
+                                    <label class="form-label">Icon (Type:png, Max: 1MB)</label>
+                                    <input type="file" name="icon" class="form-control {{ hasError('icon') }}" accept=".png">
                                     @error('icon')
                                     {!! displayError($message) !!}
                                     @enderror

@@ -13,7 +13,16 @@ class BrandController extends Controller
 {
     public function index()
     {
-        $brands = Brand::latest()->paginate(20);
+        $data = Brand::query();
+        $data->latest();
+        $data->when(request()->get('name'),function($query) {
+           $name = request()->get('name');
+           $query->where('name',"LIKE","%{$name}%");
+        });
+        $data->when(request()->get('status'),function($query) {
+           $query->where('status',request()->get('status'));
+        });
+        $brands = $data->paginate(15);
         return view('admin.attributes.brand_list', compact('brands'));
     }
 

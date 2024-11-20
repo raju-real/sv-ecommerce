@@ -10,7 +10,11 @@
 
     $(document).on('change', '#category', function () {
         const category_id = $(this).val();
-        appendSubCategory(category_id);
+        if(category_id) {
+            appendSubCategory(category_id);
+        } else {
+            subCategorySelector.empty().append('<option value="">Select Subcategory</option>');
+        }
     });
 
     function appendSubCategory(category_id) {
@@ -18,9 +22,11 @@
         $.ajax({
             url: base_url + "/api/category-wise-subcategories/" + category_id,
             success: function (response) {
-                $.each(response, function (i, subcategory) {
+                const appendValueKey = response.append_value || 'id';
+                $.each(response.subcategories, function (i, subcategory) {
+                    const optionValue = appendValueKey === 'id' ? subcategory.id : subcategory.slug;
                     const option = $('<option>', {
-                        value: subcategory.id,
+                        value: optionValue,
                         text: subcategory.name
                     });
 

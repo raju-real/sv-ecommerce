@@ -20,6 +20,55 @@
 
     <div class="row">
         <div class="col-12">
+            <!-- Accordion for Search -->
+            <div class="accordion mb-3" id="accordionSearch">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingSearch">
+                        <button class="accordion-button {{ request()->query() ? '' : 'collapsed' }}" type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#collapseSearch"
+                                aria-expanded="{{ request()->query() ? 'true' : 'false' }}"
+                                aria-controls="collapseSearch">
+                            Search
+                        </button>
+                    </h2>
+                    <div id="collapseSearch" class="accordion-collapse collapse {{ request()->query() ? 'show' : '' }}"
+                         aria-labelledby="headingSearch"
+                         data-bs-parent="#accordionSearch">
+                        <div class="accordion-body">
+                            <form method="GET" action="{{ route('admin.brands.index') }}">
+                                <div class="row">
+                                    <div class="col-md-6 pb-4">
+                                        <div class="form-group">
+                                            <input type="search" name="name" class="form-control"
+                                                   placeholder="Search by Name" value="{{ request('name') ?? '' }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <select name="status" class="form-select">
+                                                <option value="" {{ !isset(request()->status) ? 'selected' : '' }}>Status</option>
+                                                @foreach(getStatus() as $status)
+                                                    <option
+                                                        value="{{ $status->value }}" {{ request('status') === $status->value ? 'selected' : '' }}>{{ $status->title }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 mt-0">
+                                        <button type="submit" class="btn btn-primary">Search</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive">
@@ -41,11 +90,9 @@
                                     <td>{{ $brand->name ?? '' }}</td>
                                     <td>
                                         @if($brand->logo != Null && file_exists($brand->logo))
-                                            <img src="{{ asset($brand->logo) }}"
-                                                 class="avatar-sm rounded-3 d-block ">
+                                            <img src="{{ asset($brand->logo) }}" class="rounded-3 d-block img-brand">
                                         @else
-                                            <img src="{{ asset('assets/common/images/ecommerce.png') }}"
-                                                 class="avatar-sm rounded-3 d-block">
+                                            <img src="{{ asset('assets/common/images/ecommerce.png') }}" class="rounded-3 d-block img-brand">
                                         @endif
                                     </td>
                                     <td>{{ $brand?->products?->count() ?? 0 }}</td>
@@ -57,6 +104,18 @@
                                            href="{{ route('admin.brands.edit',$brand->slug) }}"
                                            class="btn btn-sm btn-soft-success"><i class="fa fa-edit"></i>
                                         </a>
+                                         <a data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"
+                                           class="btn btn-sm btn-soft-danger delete-data"
+                                           data-id="{{ 'delete-brand-'.$brand->id }}"
+                                           href="javascript:void(0);">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                        <form id="delete-brand-{{ $brand->id }}"
+                                              action="{{ route('admin.brands.destroy',$brand->id) }}"
+                                              method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
                                     </td>
                                 </tr>
                             @empty
@@ -67,10 +126,8 @@
                     </div>
 
                 </div>
-                <div class="col-lg-12">
-                    <ul class="pagination pagination-rounded justify-content-center mt-3 mb-4 pb-1">
-                        {{ $brands->links() }}
-                    </ul>
+                <div class="d-flex justify-content-center">
+                    {!! $brands->links('pagination::bootstrap-4') !!}
                 </div>
             </div>
         </div>

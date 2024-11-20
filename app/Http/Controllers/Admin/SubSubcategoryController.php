@@ -15,15 +15,32 @@ class SubSubcategoryController extends Controller
 {
     public function index()
     {
-        $sub_subcategories = SubSubcategory::latest()->paginate(20);
+        $data = SubSubcategory::query();
+        $data->latest();
+        $data->when(request()->get('name'),function($query) {
+           $name = request()->get('name');
+           $query->where('name',"LIKE","%{$name}%");
+        });
+
+        $data->when(request()->get('category'),function($query) {
+           $query->where('category_id',categoryIdBySlug(request()->get('category')));
+        });
+
+        $data->when(request()->get('subcategory'),function($query) {
+           $query->where('subcategory_id',subCategoryIdBySlug(request()->get('subcategory')));
+        });
+
+        $data->when(request()->get('status'),function($query) {
+           $query->where('status',request()->get('status'));
+        });
+        $sub_subcategories = $data->paginate(20);
         return view('admin.attributes.sub_subcategory_list', compact('sub_subcategories'));
     }
 
     public function create()
     {
-        $categories = Category::orderBy('name')->select('id', 'name')->get();
         $route = route('admin.sub-subcategories.store');
-        return view('admin.attributes.sub_subcategory_add_edit', compact('categories', 'route'));
+        return view('admin.attributes.sub_subcategory_add_edit', compact( 'route'));
     }
 
     public function store(Request $request)
@@ -45,8 +62,8 @@ class SubSubcategoryController extends Controller
                 'int',
                 Rule::exists('sub_categories', 'id')->whereNull('deleted_at'),
             ],
-            'icon' => 'nullable|sometimes|mimes:jpg,jpeg,png|max:1024',
-            'status' => 'required|max:10|in:active,in-active'
+            'icon' => 'nullable|sometimes|mimes:png|max:1024',
+            'status' => 'required|in:active,in-active'
         ]);
 
         $sub_category = new SubSubcategory();
@@ -67,9 +84,8 @@ class SubSubcategoryController extends Controller
     public function edit($slug)
     {
         $sub_subcategory = SubSubcategory::whereSlug($slug)->first();
-        $categories = Category::orderBy('name')->select('id', 'name')->get();
         $route = route('admin.sub-subcategories.update', $sub_subcategory->id);
-        return view('admin.attributes.sub_subcategory_add_edit', compact('sub_subcategory', 'categories', 'route'));
+        return view('admin.attributes.sub_subcategory_add_edit', compact('sub_subcategory',  'route'));
     }
 
 
@@ -92,8 +108,8 @@ class SubSubcategoryController extends Controller
                 'int',
                 Rule::exists('sub_categories', 'id')->whereNull('deleted_at')
             ],
-            'icon' => 'nullable|sometimes|mimes:jpg,jpeg,png|max:1024',
-            'status' => 'required|max:10|in:active,in-active'
+            'icon' => 'nullable|sometimes|mimes:png|max:1024',
+            'status' => 'required|in:active,in-active'
         ]);
 
         $sub_category = SubSubcategory::findOrFail($id);
@@ -113,7 +129,7 @@ class SubSubcategoryController extends Controller
 
     public function destroy($id)
     {
-        SubCategory::findOrFail($id)->delete();
+        SubSubcategory::findOrFail($id)->delete();
         return redirect()->route('admin.subcategories.index')->with(deleteMessage());
     }
 }
